@@ -1,0 +1,13 @@
+version: "2"
+services:
+  app:
+    extends:
+      file: docker-compose.build.yml
+      service: mvn
+    ports:
+      - 8080:8080
+    links:
+      - wiremock
+      - db-postgres-reach
+    command: spring-boot:run
+    env_file: .env
