@@ -1,0 +1,26 @@
+version: "2"
+services:
+  wiremock:
+    image: docker.impello.co.uk/hub__wiremock--wiremock:2.32.0
+    volumes:
+      - ../src/test/resources/wiremock:/home/wiremock
+    expose:
+      - 8080
+    env_file: .env.wiremock
+
+  db-postgres-reach:
+    image: docker.impello.co.uk/hub__postgres:9.4
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=regvalidationservice
+      - POSTGRES_PASSWORD=regvalidationservice
+      - POSTGRES_DB=reach
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    volumes_from:
+      - postgresFiles-reach
+
+  postgresFiles-reach:
+    image: docker.impello.co.uk/hub__postgres:9.4
+    command: "true"
